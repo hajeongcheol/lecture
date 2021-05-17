@@ -19,7 +19,7 @@ public class Class {
     private String textBook;
 
     @PostPersist
-    public void onPostPersist() {
+    public void onPostPersist() throws Exception {
         // Following code causes dependency to external APIs
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
@@ -36,6 +36,8 @@ public class Class {
             ClassRegistered classRegistered = new ClassRegistered();
             BeanUtils.copyProperties(this, classRegistered);
             classRegistered.publishAfterCommit();
+        }else {
+            throw new RollbackException("Failed during payment");
         }
     }
 

@@ -1,7 +1,6 @@
 server:
   port: 8080
 ---
-
 spring:
   profiles: default
   jpa:
@@ -30,7 +29,6 @@ spring:
         event-out:
           destination: lecture
           contentType: application/json
-
 logging:
   level:
     org.hibernate.type: trace
@@ -40,8 +38,14 @@ server:
 api:
   payment:
     url: http://localhost:8083
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 1000
 ---
-
 spring:
   profiles: docker
   cloud:
@@ -68,3 +72,10 @@ spring:
 api:
   payment:
     url: http://pay:8080
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 1000
