@@ -4,6 +4,5 @@ RUN pip install kafka-python
 
 WORKDIR /app
 COPY alert_consumer.py alert_consumer.py
-ENV KAFKA_URL=my-kafka.kafka.svc.cluster.local:9092
 
 ENTRYPOINT ["python","-u","alert_consumer.py"]
