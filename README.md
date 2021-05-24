@@ -544,14 +544,15 @@ public class PaymentServiceFallback implements PaymentService {
 
 ```
 # 결제 (pay) 서비스를 잠시 내려놓음
+cd ./pay/kubernetes
+kubectl delete -f deployment.yml
 
 # 수강 신청
 http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Fail
 http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Fail
 
 # 결제서비스 재기동
-cd pay
-mvn spring-boot:run
+kubectl apply -f deployment.yml
 
 # 수강 신청
 http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Success
@@ -673,6 +674,8 @@ public class PolicyHandler {
 
 ```
 # 배송 서비스 (course) 를 잠시 내려놓음 
+cd ./course/kubernetes
+kubectl delete -f deployment.yml
 
 # 수강 신청
 http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Success
@@ -682,9 +685,8 @@ http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.am
 http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes   # 수강 신청 완료 
 http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/inquiryMypages  # 배송 상태 "deliveryStatus": null
 
-# 배송 서비스 기동
-cd course
-mvn spring-boot:run
+# 배송 서비스 (course) 기동
+kubectl apply -f deployment.yml
 
 # 배송 상태 확인
 http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/inquiryMypages  # 배송 상태 "deliveryStatus": "DELIVERY_START"
