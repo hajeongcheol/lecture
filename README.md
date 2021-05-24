@@ -1024,9 +1024,11 @@ Shortest transaction:           0.00
 ## ConfigMap을 사용하여 운영과 개발 환경 분리
 
 - kafka환경
+```
   운영 : kafka-1621824578.kafka.svc.cluster.local:9092
   개발 : localhost:9092
-  
+```
+
 ```
 configmap yaml 파일
 
