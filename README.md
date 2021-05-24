@@ -40,19 +40,17 @@
 
 비기능적 요구사항
 1. 트랜잭션
-    1. 강의 결제가 완료 되어야만 강의 교재를 배송할 수 있음 Sync 호출
+    1. 강의 결제가 완료 되어야만 수강 신청 완료 할 수 있음 Sync 호출
 1. 장애격리
     1. 수강신청 시스템이 과중되면 사용자를 잠시동안 받지 않고 신청을 잠시 후에 하도록 유도한다  Circuit breaker
 1. 성능
-    1. 학생이 마이페이지에서 등록된 강의와 수강 상태를 확인할 수 있어야 한다  CQRS
+    1. 학생이 마이페이지에서 등록된 강의와 수강 및 교재 배송 상태를 확인할 수 있어야 한다  CQRS
     1. 수강신청/배송 상태가 바뀔때마다 카톡 등으로 알림을 줄 수 있어야 한다  Event driven
 
 
 # 체크포인트
 
 - 분석 설계
-
-
   - 이벤트스토밍: 
     - 스티커 색상별 객체의 의미를 제대로 이해하여 헥사고날 아키텍처와의 연계 설계에 적절히 반영하고 있는가?
     - 각 도메인 이벤트가 의미있는 수준으로 정의되었는가?
@@ -380,6 +378,25 @@ Spring Cloud JPA를 사용하여 개발하였기 때문에 소스의 변경 부�
 
 ```
 
+- mysql 서비스 확인 (kubectl get all,pvc -n mysql)
+
+```
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/mysql-1621826572-7b6b9d8477-qsjmb   1/1     Running   0          3h44m
+
+NAME                       TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/mysql-1621826572   ClusterIP   10.100.64.70   <none>        3306/TCP   8h
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mysql-1621826572   1/1     1            1           8h
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/mysql-1621826572-7b6b9d8477   1         1         1       8h
+
+NAME                                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/mysql-1621826572   Bound    pvc-d746469a-9f39-4177-9f5a-1aee384d6064   8Gi        RWO            gp2            8h
+```
+
 ## 폴리글랏 프로그래밍
 
 SMS 서비스(alert)는 시나리오 상 모든 상태 변경이 발생 시 고객에게 SMS 메시지 보내는 기능의 구현 파트는 해당 팀이 python 을 이용하여 구현하기로 하였다. 
@@ -394,37 +411,7 @@ import os
 kafka_url = os.getenv('KAFKA_URL')
 log_file = os.getenv('LOG_FILE')
 
-if kafka_url == None:
-    kafka_url = "localhost:9092"
-
-if log_file == None:
-    log_file = "debug.log"
-
-dictConfig({
-    'version': 1,
-    'formatters': {
-        'default': {
-            'format': '[%(asctime)s] %(message)s',
-        }
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': log_file,
-            'formatter': 'default',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default'
-        }
-    },
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['file', 'console']
-    }
-})
+...
 
 logging.debug("KAFKA URL : %s" % (kafka_url))
 logging.debug("LOG_FILE : %s" % (log_file))
@@ -476,6 +463,26 @@ public interface PaymentService {
 }
 ```
 
+- FallBack 처리
+```
+# (class) PaymentServiceFallback.java
+
+package lecture.external;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class PaymentServiceFallback implements PaymentService {
+    @Override
+    public boolean pay(Payment payment) {
+        //do nothing if you want to forgive it
+
+        System.out.println("Circuit breaker has been opened. Fallback returned instead.");
+        return false;
+    }
+}
+```
+
 - 주문을 받은 직후(@PostPersist) 결제를 요청하도록 처리
 ```
 # Class.java (Entity)
@@ -503,24 +510,22 @@ public interface PaymentService {
 
 
 ```
-# 결제 (pay) 서비스를 잠시 내려놓음 (ctrl+c)
+# 결제 (pay) 서비스를 잠시 내려놓음
 
 # 수강 신청
-http POST http://localhost:8081/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Fail
-http POST http://localhost:8081/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Fail
+http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Fail
+http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Fail
 
 # 결제서비스 재기동
 cd pay
 mvn spring-boot:run
 
 # 수강 신청
-http POST http://localhost:8081/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Success
-http POST http://localhost:8081/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Success
+http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Success
+http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Success
 ```
 
-- 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에서 설명한다.)
-
-
+- 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. 
 
 
 ## 비동기식 호출 / 시간적 디커플링 / 장애격리 / 최종 (Eventual) 일관성 테스트
@@ -616,11 +621,11 @@ public class PolicyHandler {
     public void whenTextbookDeliveried_then_UPDATE_2(@Payload TextbookDeliveried textbookDeliveried) {
         try {
             if (textbookDeliveried.isMe()) {
-                // view 객체 조회
                 List<InquiryMypage> inquiryMypageList = inquiryMypageRepository
                         .findByPaymentId(textbookDeliveried.getPaymentId());
                 for (InquiryMypage inquiryMypage : inquiryMypageList) {
                     inquiryMypage.setDeliveryStatus(textbookDeliveried.getStatus());
+
                     // view 레파지 토리에 save
                     inquiryMypageRepository.save(inquiryMypage);
                 }
@@ -632,23 +637,24 @@ public class PolicyHandler {
 ```
 
 배송 시스템은 수강신청/결제와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 배송시스템이 유지보수로 인해 잠시 내려간 상태라도 수강신청을 받는데 문제가 없다:
+
 ```
-# 배송 서비스 (course) 를 잠시 내려놓음 (ctrl+c)
+# 배송 서비스 (course) 를 잠시 내려놓음 
 
 # 수강 신청
-http POST http://localhost:8081/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Success
-http POST http://localhost:8081/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Success
+http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=10000 student=KimSoonHee textBook=eng_book #Success
+http POST http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes courseId=1 fee=12000 student=JohnDoe textBook=kor_book #Success
 
 # 수강 신청 상태 확인
-http GET http://localhost:8081/classes   # 수강 신청 완료 
-http GET http://localhost:8081/inquiryMypages  # 배송 상태 "deliveryStatus": null
+http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/classes   # 수강 신청 완료 
+http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/inquiryMypages  # 배송 상태 "deliveryStatus": null
 
 # 배송 서비스 기동
 cd course
 mvn spring-boot:run
 
 # 배송 상태 확인
-http GET http://localhost:8081/inquiryMypages  # 배송 상태 "deliveryStatus": "DELIVERY_START"
+http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.amazonaws.com:8080/inquiryMypages  # 배송 상태 "deliveryStatus": "DELIVERY_START"
 ```
 
 
@@ -728,7 +734,7 @@ kubectl expose deploy course --type=ClusterIP --port=8080
 
 시나리오는 수강신청(class)-->결제(pay) 시의 연결을 RESTful Request/Response 로 연동하여 구현이 되어있고, 결제 요청이 과도할 경우 CB 를 통하여 장애격리.
 
-- Hystrix 를 설정:  요청처리 쓰레드에서 처리시간이 610 밀리가 넘어서기 시작하여 어느정도 유지되면 CB 회로가 닫히도록 (요청을 빠르게 실패처리, 차단) 설정
+- Hystrix 를 설정:  요청처리 쓰레드에서 처리시간이 1000 밀리가 넘어서기 시작하여 어느정도 유지되면 CB 회로가 닫히도록 (요청을 빠르게 실패처리, 차단) 설정
 ```
 # application.yml
 
@@ -836,7 +842,7 @@ Shortest transaction:           0.09
 kubectl autoscale deploy class --min=1 --max=10 --cpu-percent=30
 kubectl autoscale deploy pay --min=1 --max=10 --cpu-percent=30
 ```
-- CB 에서 했던 방식대로 워크로드를 30초 동안 걸어준다.
+- CB 에서 했던 방식대로 워크로드를 30초 동안 걸어준다. 
 ```
 siege -c50 -t30S -r10 -v --content-type "application/json" 'http://gateway:8080/classes POST {"courseId": 1, "fee": 10000, "student": "gil-dong", "textBook": "eng_book"}'
 ```
@@ -912,7 +918,7 @@ HTTP/1.1 201     1.31 secs:     251 bytes ==> POST http://gateway:8080/courses
 
 ```
 
-- 새버전으로의 배포 시작
+- 새버전(v0.1)으로의 배포 시작
 ```
 kubectl apply -f kubectl apply -f deployment_v0.1.yml
 
@@ -933,13 +939,31 @@ Failed transactions:            1123
 Longest transaction:           29.72
 Shortest transaction:           0.00
 ```
-배포기간중 Availability 가 평소 100%에서 35% 대로 떨어지는 것을 확인. 원인은 쿠버네티스가 성급하게 새로 올려진 서비스를 READY 상태로 인식하여 서비스 유입을 진행한 것이기 때문. 이를 막기위해 Readiness Probe 를 설정함:
+배포 중 Availability 가 평소 100%에서 35% 대로 떨어지는 것을 확인. 원인은 쿠버네티스가 성급하게 새로 올려진 서비스를 READY 상태로 인식하여 서비스 유입을 진행한 것이기 때문. 이를 막기위해 Readiness Probe 를 설정함:
 
 ```
 # deployment.yaml 의 readiness probe 의 설정:
 
+# (course) deployment.yaml 파일
+ 
+          readinessProbe:
+            httpGet:
+              path: '/courses'
+              port: 8080
+            initialDelaySeconds: 20
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/courses'
+              port: 8080
+            initialDelaySeconds: 180
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
 
-kubectl apply -f deployment.yml
+/> kubectl apply -f deployment.yml
 ```
 
 - 동일한 시나리오로 재배포 한 후 Availability 확인:
@@ -964,6 +988,10 @@ Shortest transaction:           0.00
 
 ## ConfigMap을 사용하여 운영과 개발 환경 분리
 
+- kafka환경
+  운영 : kafka-1621824578.kafka.svc.cluster.local:9092
+  개발 : localhost:9092
+  
 ```
 configmap yaml 파일
 
