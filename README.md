@@ -1075,6 +1075,41 @@ consumer = KafkaConsumer('lecture', bootstrap_servers=[
 ```
 ## 모니터링 (istio 설치 및 Kiali 구성)
 
+```
+root@labs-1409824742:/home/project/team# kubectl get all -n istio-system
+NAME                                        READY   STATUS    RESTARTS   AGE
+pod/istio-egressgateway-74f9769788-5z25x    1/1     Running   0          57m
+pod/istio-ingressgateway-74645cb9df-6t4zk   1/1     Running   0          57m
+pod/istiod-756fdd548-rz5fn                  1/1     Running   0          57m
+pod/jaeger-operator-cbbdf48-wh6bq           1/1     Running   0          20m
+pod/kiali-89fd7f87b-mjtkl                   1/1     Running   0          37m
+pod/prometheus-788c945c9c-ft9wd             2/2     Running   0          28m
+
+NAME                              TYPE           CLUSTER-IP       EXTERNAL-IP                                                                    PORT(S)                                                                      AGE
+service/istio-egressgateway       ClusterIP      10.100.128.222   <none>                                                                         80/TCP,443/TCP,15443/TCP                                                     57m
+service/istio-ingressgateway      LoadBalancer   10.100.24.155    aac2dd82b25c4416b973f4e43609696a-1789343097.ap-northeast-2.elb.amazonaws.com   15021:31151/TCP,80:30591/TCP,443:31900/TCP,31400:31273/TCP,15443:32249/TCP   57m
+service/istiod                    ClusterIP      10.100.167.39    <none>                                                                         15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP                                57m
+service/jaeger-operator-metrics   ClusterIP      10.100.233.42    <none>                                                                         8383/TCP,8686/TCP                                                            19m
+service/kiali                     LoadBalancer   10.100.5.19      a4aba4808c91d4027949418f3d13b407-827239036.ap-northeast-2.elb.amazonaws.com    20001:32662/TCP,9090:30625/TCP                                               37m
+service/prometheus                ClusterIP      10.100.32.199    <none>                                                                         9090/TCP                                                                     28m
+
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/istio-egressgateway    1/1     1            1           57m
+deployment.apps/istio-ingressgateway   1/1     1            1           57m
+deployment.apps/istiod                 1/1     1            1           57m
+deployment.apps/jaeger-operator        1/1     1            1           20m
+deployment.apps/kiali                  1/1     1            1           37m
+deployment.apps/prometheus             1/1     1            1           28m
+
+NAME                                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/istio-egressgateway-74f9769788    1         1         1       57m
+replicaset.apps/istio-ingressgateway-74645cb9df   1         1         1       57m
+replicaset.apps/istiod-756fdd548                  1         1         1       57m
+replicaset.apps/jaeger-operator-cbbdf48           1         1         1       20m
+replicaset.apps/kiali-89fd7f87b                   1         1         1       37m
+replicaset.apps/prometheus-788c945c9c             1         1         1       28m
+```
+
 ![image](https://user-images.githubusercontent.com/80744192/119357389-79619080-bce2-11eb-88b8-41fceafc8568.png)
 
 
