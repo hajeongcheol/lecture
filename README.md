@@ -1075,7 +1075,7 @@ consumer = KafkaConsumer('lecture', bootstrap_servers=[
 
 
 ```
-## 모니터링 (istio 설치 및 Kiali 구성)
+## 모니터링 (istio 설치, Kiali 구성, Grafana 구성)
 
 ```
 root@labs-1409824742:/home/project/team# kubectl get all -n istio-system
@@ -1111,7 +1111,9 @@ replicaset.apps/jaeger-operator-cbbdf48           1         1         1       20
 replicaset.apps/kiali-89fd7f87b                   1         1         1       37m
 replicaset.apps/prometheus-788c945c9c             1         1         1       28m
 ```
-- Kiali 모니터링
+- Tracing (Kiali)
 ![image](https://user-images.githubusercontent.com/80744192/119357389-79619080-bce2-11eb-88b8-41fceafc8568.png)
 
+- 모니터링 (Grafana)
+![image](https://user-images.githubusercontent.com/80744192/119419299-f1f13d00-bd34-11eb-88ec-6cfce29ca234.png)
 
