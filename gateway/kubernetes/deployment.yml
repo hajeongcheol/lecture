@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: gateway
-          image: hajeongcheol/gateway:latest
+          image: 052937454741.dkr.ecr.ap-northeast-2.amazonaws.com/lecture-gateway:latest
           ports:
             - containerPort: 8080

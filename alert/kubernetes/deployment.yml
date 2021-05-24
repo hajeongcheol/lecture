@@ -16,7 +16,12 @@ spec:
     spec:
       containers:
         - name: consumer
-          image: hajeongcheol/alert_consumer:latest 
+          image: 052937454741.dkr.ecr.ap-northeast-2.amazonaws.com/lecture-consumer:latest
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
           env:
           - name: KAFKA_URL
             valueFrom:
@@ -29,9 +34,14 @@ spec:
                 name: kafka-config
                 key: LOG_FILE
         - name: web
-          image: hajeongcheol/alert_web:latest
+          image: 052937454741.dkr.ecr.ap-northeast-2.amazonaws.com/lecture-web:latest
           ports:
             - containerPort: 8084
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
           readinessProbe:
             httpGet:
               path: '/alert'
