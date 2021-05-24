@@ -1073,3 +1073,8 @@ consumer = KafkaConsumer('lecture', bootstrap_servers=[
 
 
 ```
+## 모니터링 (istio 설치 및 Kiali 구성)
+
+![image](https://user-images.githubusercontent.com/80744192/119357389-79619080-bce2-11eb-88b8-41fceafc8568.png)
+
+
