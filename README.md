@@ -1119,7 +1119,8 @@ replicaset.apps/prometheus-788c945c9c             1         1         1       10
 - Tracing (Kiali)
 ![image](https://user-images.githubusercontent.com/80744192/119357389-79619080-bce2-11eb-88b8-41fceafc8568.png)
 
-- Jaeger 
+- Jaeger
+![image](https://user-images.githubusercontent.com/80744192/119419756-ed795400-bd35-11eb-9530-6af13f3bfa5d.png)
 
 - 모니터링 (Grafana)
 ![image](https://user-images.githubusercontent.com/80744192/119419299-f1f13d00-bd34-11eb-88ec-6cfce29ca234.png)
