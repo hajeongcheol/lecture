@@ -106,6 +106,15 @@
 
 # 분석/설계
 
+
+## AS-IS 조직 (Horizontally-Aligned)
+  ![image](https://user-images.githubusercontent.com/487999/79684144-2a893200-826a-11ea-9a01-79927d3a0107.png)
+  
+
+## TO-BE 조직 (Vertically-Aligned)
+  ![image](https://user-images.githubusercontent.com/487999/79684159-3543c700-826a-11ea-8d5f-a3fc0c4cad87.png)
+
+
 ## Event Storming 결과
 * MSAEz 로 모델링한 이벤트스토밍 결과:  http://www.msaez.io/#/storming/OnQd88FgmmV8NAUxHBeXJxxGyvf2/share/377bfc543592e100d0e49f380692a442
 
@@ -197,18 +206,24 @@
 분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 각 BC별로 대변되는 마이크로 서비스들을 스프링부트와 파이선으로 구현하였다. 구현한 각 서비스를 로컬에서 실행하는 방법은 아래와 같다 (각자의 포트넘버는 8081 ~ 808n 이다)
 
 ```
-cd app
+cd course
 mvn spring-boot:run
 
-cd pay
+cd class
 mvn spring-boot:run 
 
-cd store
+cd pay
 mvn spring-boot:run  
 
-cd customer
-python policy-handler.py 
+cd alert
+python alert_consumer.py
+python alert_web.py 
+
+cd gateway
+mvn spring-boot:run
 ```
+
+- 아래 부터는 AWS 클라우드의 EKS 서비스 내에 서비스를 모두 배포 후 설명을 진행한다.
 
 ## DDD 의 적용
 
