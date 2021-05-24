@@ -1116,12 +1116,12 @@ replicaset.apps/jaeger-566c547fb9                 1         1         1       13
 replicaset.apps/kiali-89fd7f87b                   1         1         1       10h
 replicaset.apps/prometheus-788c945c9c             1         1         1       10h
 ```
-- Tracing (Kiali)
+- Tracing (Kiali) http://a4aba4808c91d4027949418f3d13b407-827239036.ap-northeast-2.elb.amazonaws.com:20001/
 ![image](https://user-images.githubusercontent.com/80744192/119357389-79619080-bce2-11eb-88b8-41fceafc8568.png)
 
-- Jaeger
+- Jaeger http://ae3b283c82cb34c0f88f2ca92fc70489-1898513510.ap-northeast-2.elb.amazonaws.com/
 ![image](https://user-images.githubusercontent.com/80744192/119419756-ed795400-bd35-11eb-9530-6af13f3bfa5d.png)
 
-- 모니터링 (Grafana)
+- 모니터링 (Grafana) http://http://a17ce955b36c643dba43634c3958f665-1939868886.ap-northeast-2.elb.amazonaws.com:3000/
 ![image](https://user-images.githubusercontent.com/80744192/119419299-f1f13d00-bd34-11eb-88ec-6cfce29ca234.png)
 
