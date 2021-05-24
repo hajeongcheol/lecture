@@ -972,7 +972,7 @@ kind: ConfigMap
 metadata:
   name: kafka-config
 data:
-  KAFKA_URL: my-kafka.kafka.svc.cluster.local:9092
+  KAFKA_URL: kafka-1621824578.kafka.svc.cluster.local:9092
   LOG_FILE: /tmp/debug.log
 ```
 
