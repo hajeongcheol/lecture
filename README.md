@@ -1111,7 +1111,7 @@ replicaset.apps/jaeger-operator-cbbdf48           1         1         1       20
 replicaset.apps/kiali-89fd7f87b                   1         1         1       37m
 replicaset.apps/prometheus-788c945c9c             1         1         1       28m
 ```
-
+- Kiali 모니터링
 ![image](https://user-images.githubusercontent.com/80744192/119357389-79619080-bce2-11eb-88b8-41fceafc8568.png)
 
 
