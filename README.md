@@ -125,15 +125,14 @@
 ### 어그리게잇으로 묶기
 ![어그리게잇](https://user-images.githubusercontent.com/80744183/119314463-beb89a80-bcaf-11eb-868c-e307669ccc30.png)
 
-    - app의 Order, store 의 주문처리, 결제의 결제이력은 그와 연결된 command 와 event 들에 의하여 트랜잭션이 유지되어야 하는 단위로 그들 끼리 묶어줌
+    - class의 수강신청, course의 강의등록, 결제의 결제이력은 그와 연결된 command 와 event 들에 의하여 트랜잭션이 유지되어야 하는 단위로 그들 끼리 묶어줌
 
 ### 바운디드 컨텍스트로 묶기
 
 ![바운디드](https://user-images.githubusercontent.com/80744183/119314555-d8f27880-bcaf-11eb-82cd-092f27876c0d.png)
 
     - 도메인 서열 분리 
-        - Core Domain:  app(front), store : 없어서는 안될 핵심 서비스이며, 연견 Up-time SLA 수준을 99.999% 목표, 배포주기는 app 의 경우 1주일 1회 미만, store 의 경우 1개월 1회 미만
-        - Supporting Domain:   marketing, customer : 경쟁력을 내기위한 서비스이며, SLA 수준은 연간 60% 이상 uptime 목표, 배포주기는 각 팀의 자율이나 표준 스프린트 주기가 1주일 이므로 1주일 1회 이상을 기준으로 함.
+        - Core Domain:  class, course : 없어서는 안될 핵심 서비스이며, 연견 Up-time SLA 수준을 99.999% 목표, 배포주기는 class 의 경우 1주일 1회 미만, course 의 경우 1개월 1회 미만
         - General Domain:   pay : 결제서비스로 3rd Party 외부 서비스를 사용하는 것이 경쟁력이 높음 (핑크색으로 이후 전환할 예정)
 
 ### 폴리시 부착 (괄호는 수행주체, 폴리시 부착을 둘째단계에서 해놔도 상관 없음. 전체 연계가 초기에 드러남)
@@ -172,6 +171,7 @@
 ![모델수정](https://user-images.githubusercontent.com/80744183/119315187-8cf40380-bcb0-11eb-88cf-26f55d8a8b70.png)
     
     - 수정된 모델은 모든 요구사항을 커버함.
+    - 배송 등록 event의 경우 한 event로 통함함.
 
 ### 비기능 요구사항에 대한 검증
 
