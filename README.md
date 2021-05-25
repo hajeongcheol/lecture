@@ -153,12 +153,14 @@
 ### 1차 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
 
 <img width="354" alt="1차본완성_1" src="https://user-images.githubusercontent.com/80744183/119315026-5918de00-bcb0-11eb-9cd4-048d7e9413b9.png">
+    
     - 수강생이 강의를 신청한다 (ok)
     - 수강생이 강의를 결제한다 (ok)
     - 강의신청이 되면 주문 내역이 배송팀에게 전달된다 (ok)
     - 배송팀에서 강의 교재 배송 출발한다 (ok)
 
 <img width="354" alt="1차본완성_2" src="https://user-images.githubusercontent.com/80744183/119315093-72218f00-bcb0-11eb-89da-74c039d0435a.png">
+    
     - 고객이 주문을 취소할 수 있다 (ok) 
     - 주문이 취소되면 결제 취소된다 (ok) 
     - 결제가 취소되면 배송이 취소된다 (ok) 
