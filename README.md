@@ -25,7 +25,7 @@
     - [오토스케일 아웃](#오토스케일-아웃)
     - [무정지 재배포](#무정지-재배포)
     - [개발 운영 환경 분리](#개발-운영-환경-분리)
-    - [Service Mesh / 모니터링] istio/promethus/grafana/jaeger/kiali 
+    - [모니터링](#모니터링)
 
 # 서비스 시나리오
 
@@ -1087,7 +1087,8 @@ consumer = KafkaConsumer('lecture', bootstrap_servers=[
 
 
 ```
-## 모니터링 (istio 설치, Kiali 구성, Jaeger 구성, Prometheus 및 Grafana 구성)
+## 모니터링
+* istio 설치, Kiali 구성, Jaeger 구성, Prometheus 및 Grafana 구성
 
 ```
 root@labs-1409824742:/home/project/team# kubectl get all -n istio-system
