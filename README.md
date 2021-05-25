@@ -747,6 +747,13 @@ http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.ama
 ![image](https://user-images.githubusercontent.com/80744224/119324092-620ead00-bcba-11eb-895d-3abda8681720.png)
 
 
+-- 배포 성공
+
+![image](https://user-images.githubusercontent.com/80744224/119431690-f9711000-bd4d-11eb-9c59-d43244d3f31a.png)
+
+
+
+
 ### docker images를 수작업 배포/기동
 
 - package & docker image build/push
