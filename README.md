@@ -742,8 +742,7 @@ http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.ama
 ![image](https://user-images.githubusercontent.com/80744224/119324268-9aae8680-bcba-11eb-96cc-9ad2d6a12b04.png)
 
 -- KUBE_TOKEN
-![image](https://user-images.githubusercontent.com/80744224/119324501-dea18b80-bcba-11eb-8c9e-c75474124a1a.png)
-
+![image](https://user-images.githubusercontent.com/80744192/119440590-8ff9fd00-bd5f-11eb-8717-84e0edc430ac.png)
 
 ![image](https://user-images.githubusercontent.com/80744224/119324092-620ead00-bcba-11eb-895d-3abda8681720.png)
 
