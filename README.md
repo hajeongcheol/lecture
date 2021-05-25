@@ -739,7 +739,8 @@ http GET http://aa8ed367406254fc0b4d73ae65aa61cd-24965970.ap-northeast-2.elb.ama
 - Codebuild 와 EKS 연결
 
 -- KUBE_URL
-![image](https://user-images.githubusercontent.com/80744224/119324268-9aae8680-bcba-11eb-96cc-9ad2d6a12b04.png)
+![image](https://user-images.githubusercontent.com/80744192/119440729-d51e2f00-bd5f-11eb-9b8d-1c5283fe300b.png)
+
 
 -- KUBE_TOKEN
 ![image](https://user-images.githubusercontent.com/80744192/119440590-8ff9fd00-bd5f-11eb-8717-84e0edc430ac.png)
