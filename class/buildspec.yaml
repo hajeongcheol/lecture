@@ -44,42 +44,42 @@ phases:
           apiVersion: v1
           kind: Service
           metadata:
-            name: $_PROJECT_NAME
+            name: class
             labels:
-              app: $_PROJECT_NAME
+              app: class
           spec:
             ports:
               - port: 8080
                 targetPort: 8080
             selector:
-              app: $_PROJECT_NAME
+              app: class
           EOF
       - |
           cat  <<EOF | kubectl apply -f -
           apiVersion: apps/v1
           kind: Deployment
           metadata:
-            name: $_PROJECT_NAME
+            name: class
             labels:
-              app: $_PROJECT_NAME
+              app: class
           spec:
             replicas: 1
             selector:
               matchLabels:
-                app: $_PROJECT_NAME
+                app: class
             template:
               metadata:
                 labels:
-                  app: $_PROJECT_NAME
+                  app: class
               spec:
                 containers:
-                  - name: $_PROJECT_NAME
+                  - name: class
                     image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
                     ports:
                       - containerPort: 8080
                     readinessProbe:
                       httpGet:
-                        path: /actuator/health
+                        path: '/classes'
                         port: 8080
                       initialDelaySeconds: 10
                       timeoutSeconds: 2
@@ -87,7 +87,7 @@ phases:
                       failureThreshold: 10
                     livenessProbe:
                       httpGet:
-                        path: /actuator/health
+                        path: '/classes'
                         port: 8080
                       initialDelaySeconds: 120
                       timeoutSeconds: 2
